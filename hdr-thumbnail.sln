@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDRThumbnail", "HDRThumbnail\HDRThumbnail.csproj", "{E7E51DF6-62D9-4E77-86FD-F9C7034AD8F4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDRThumbnail.Tests", "HDRThumbnail.Tests\HDRThumbnail.Tests.csproj", "{5F69A319-4148-46F4-813A-33791105BE10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HDRThumbnail.Exe", "HDRThumbnail.Exe\HDRThumbnail.Exe.csproj", "{504FA4C6-27E4-403F-8328-E752C5B2012F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E7E51DF6-62D9-4E77-86FD-F9C7034AD8F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7E51DF6-62D9-4E77-86FD-F9C7034AD8F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7E51DF6-62D9-4E77-86FD-F9C7034AD8F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7E51DF6-62D9-4E77-86FD-F9C7034AD8F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F69A319-4148-46F4-813A-33791105BE10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F69A319-4148-46F4-813A-33791105BE10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F69A319-4148-46F4-813A-33791105BE10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F69A319-4148-46F4-813A-33791105BE10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504FA4C6-27E4-403F-8328-E752C5B2012F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504FA4C6-27E4-403F-8328-E752C5B2012F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504FA4C6-27E4-403F-8328-E752C5B2012F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504FA4C6-27E4-403F-8328-E752C5B2012F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
