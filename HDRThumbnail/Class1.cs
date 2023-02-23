@@ -3,10 +3,6 @@ using StbImageSharp;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
-using MathNet.Numerics.LinearAlgebra;
-using MathNet.Numerics.LinearAlgebra.Double;
-
-using System.Runtime.InteropServices;
 
 namespace HDRThumbnail;
 struct vec3
@@ -152,50 +148,42 @@ public class HDRThumbnail
     {
         return (byte)Math.Max(0, Math.Min(255, (x * 255.0)));
     }
-    static void _thumbnail(Stream seekableStream, int width, int height)
+    public static void thumbnail(int _width, int _height, string inputFilePath, string outputFilePath)
     {
-        var image = ImageResultFloat.FromStream(seekableStream);
-        var meta = ImageInfo.FromStream(seekableStream);
-        if (meta == null) throw new InvalidHDRMetadataException();
-        int offsetX = (meta.Value.Width - width) / 2;
-        int offsetY = (meta.Value.Height - height) / 2;
-        using (Image<Rgb24> output = new(width, height))
+        using (var stream = File.OpenRead(inputFilePath))
         {
-            for (int wi = 0; wi < width; wi++)
+            var image = ImageResultFloat.FromStream(stream);
+            var meta = ImageInfo.FromStream(stream);
+            if (meta == null) throw new InvalidHDRMetadataException();
+            var height = meta.Value.Height * 8 / 10;
+            var width = meta.Value.Height * 8 * _width / _height / 10;
+            int offsetX = (meta.Value.Width - width) / 2;
+            int offsetY = (meta.Value.Height - height) / 2;
+            using (Image<Rgb24> output = new(width, height))
             {
-                for (int hi = 0; hi < height; hi++)
+                for (int wi = 0; wi < width; wi++)
                 {
-                    var pi = (hi + offsetY) * meta.Value.Width + (wi + offsetX);
+                    for (int hi = 0; hi < height; hi++)
+                    {
+                        var pi = (hi + offsetY) * meta.Value.Width + (wi + offsetX);
 
-                    var r = image.Data[pi * 3];
-                    var g = image.Data[pi * 3 + 1];
-                    var b = image.Data[pi * 3 + 2];
-                    var rgb = gammaCorrection(
-                        // ACESFilmicToneMapping
-                        (new vec3(r, g, b)));
+                        var r = image.Data[pi * 3];
+                        var g = image.Data[pi * 3 + 1];
+                        var b = image.Data[pi * 3 + 2];
+                        var rgb = gammaCorrection(
+                            // ACESFilmicToneMapping
+                            (new vec3(r, g, b)));
 
-                    output[wi, hi] = new Rgb24(lin(rgb.X), lin(rgb.Y), lin(rgb.Z));
-                    // pixels[pi * 3] = (byte)(r * 255);
-                    // pixels[pi * 3 + 1] = (byte)(g * 255);
-                    // pixels[pi * 3 + 2] = (byte)(b * 255);
+                        output[wi, hi] = new Rgb24(lin(rgb.X), lin(rgb.Y), lin(rgb.Z));
+                    }
                 }
+
+                output.Mutate(x=>x.Resize(_width, _height));
+                output.SaveAsJpeg(outputFilePath);
             }
-            // Do your drawing in here...
-            output.SaveAsJpeg("out.jpg");
 
         }
 
 
-    }
-    public static void thumbnail(Stream stream, int width, int height)
-    {
-        if (stream.CanSeek) _thumbnail(stream, width, height);
-        else
-        {
-            using (var copy = new MemoryStream())
-            {
-                _thumbnail(copy, width, height);
-            }
-        }
     }
 }
