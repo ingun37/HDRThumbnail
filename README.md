@@ -3,5 +3,10 @@
 Create .jpg thumbnail from .hdr file.
 
 ```c#
-HDRThumbnail.HDRThumbnail.thumbnail( 700, 500,"venice_sunset_1k.hdr", "out.jpg");
+using HDRThumbnail;
+HDRThumbnail.thumbnail( 700, 500,"venice_sunset_1k.hdr", "out.jpg");
 ```
+
+# Nuget
+
+https://www.nuget.org/packages/HDRThumbnail/
