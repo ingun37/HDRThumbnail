@@ -6,6 +6,6 @@ using (var stream = File.OpenRead("venice_sunset_1k.hdr"))
     // See https://aka.ms/new-console-template for more information
     // var url = "http://127.0.0.1:7890/venice_sunset_1k.hdr";
     // using WebClient client = new WebClient();
-    HDRThumbnail.HDRThumbnail.thumbnail( 512, 512,"venice_sunset_1k.hdr", "out.jpg");
+    HDRThumbnail.HDRThumbnail.thumbnail( 700, 500,"venice_sunset_1k.hdr", "out.jpg");
 
 }

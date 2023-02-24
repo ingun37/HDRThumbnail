@@ -155,8 +155,8 @@ public class HDRThumbnail
             var image = ImageResultFloat.FromStream(stream);
             var meta = ImageInfo.FromStream(stream);
             if (meta == null) throw new InvalidHDRMetadataException();
-            var height = meta.Value.Height * 8 / 10;
-            var width = meta.Value.Height * 8 * _width / _height / 10;
+            var height = Math.Max(16, meta.Value.Height * 8 / 10);
+            var width = Math.Max(16, Math.Min(meta.Value.Width, _width * meta.Value.Height * 8 / (10 * _height)));
             int offsetX = (meta.Value.Width - width) / 2;
             int offsetY = (meta.Value.Height - height) / 2;
             using (Image<Rgb24> output = new(width, height))
@@ -178,12 +178,9 @@ public class HDRThumbnail
                     }
                 }
 
-                output.Mutate(x=>x.Resize(_width, _height));
+                output.Mutate(x => x.Resize(_width, _height));
                 output.SaveAsJpeg(outputFilePath);
             }
-
         }
-
-
     }
 }
