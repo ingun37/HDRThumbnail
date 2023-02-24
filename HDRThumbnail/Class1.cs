@@ -7,6 +7,12 @@ using SixLabors.ImageSharp.Processing;
 namespace HDRThumbnail;
 struct vec3
 {
+    public vec3 map(Func<double, double> f) {
+        X = f(X);
+        Y = f(Y);
+        Z = f(Z);
+        return this;
+    }
     public void mulAssign(double d)
     {
         this.X = this.X * d;
@@ -140,9 +146,12 @@ public class HDRThumbnail
         // Clamp to [0, 1]
         return saturate(color);
     }
+    static double gammaCorrection(double d) {
+        return Math.Pow(d, 1.0/2.2);
+    }
     static vec3 gammaCorrection(vec3 v)
     {
-        return new vec3(Math.Pow(v.X, 1.0 / 2.2), Math.Pow(v.Y, 1.0 / 2.2), Math.Pow(v.Z, 1.0 / 2.2));
+        return v.map(gammaCorrection);
     }
     static byte lin(double x)
     {
@@ -161,20 +170,22 @@ public class HDRThumbnail
             int offsetY = (meta.Value.Height - height) / 2;
             using (Image<Rgb24> output = new(width, height))
             {
+                vec3 v = new (0,0,0);
+                Rgb24 c = new Rgb24();
                 for (int wi = 0; wi < width; wi++)
                 {
                     for (int hi = 0; hi < height; hi++)
                     {
                         var pi = (hi + offsetY) * meta.Value.Width + (wi + offsetX);
 
-                        var r = image.Data[pi * 3];
-                        var g = image.Data[pi * 3 + 1];
-                        var b = image.Data[pi * 3 + 2];
-                        var rgb = gammaCorrection(
-                            // ACESFilmicToneMapping
-                            (new vec3(r, g, b)));
-
-                        output[wi, hi] = new Rgb24(lin(rgb.X), lin(rgb.Y), lin(rgb.Z));
+                        v.X = image.Data[pi * 3];
+                        v.Y = image.Data[pi * 3 + 1];
+                        v.Z = image.Data[pi * 3 + 2];
+                        var rgb = gammaCorrection(v);
+                        c.R = lin(rgb.X);
+                        c.G = lin(rgb.Y);
+                        c.B = lin(rgb.Z);
+                        output[wi, hi].FromRgb24(c);
                     }
                 }
 
